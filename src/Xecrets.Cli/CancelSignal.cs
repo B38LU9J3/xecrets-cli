@@ -27,7 +27,7 @@ using System.Runtime.InteropServices;
 
 namespace Xecrets.Cli;
 
-internal class CancelSignal : IDisposable
+internal sealed class CancelSignal : IDisposable
 {
     private PosixSignalRegistration? _posixRegistration;
 
@@ -41,11 +41,11 @@ internal class CancelSignal : IDisposable
         _posixRegistration = PosixSignalRegistration.Create(PosixSignal.SIGINT, (h) =>
         {
             h.Cancel = true;
-            _immediateShutdownSource.Cancel();
+            _immediateShutdownSource!.Cancel();
         });
     }
 
-    protected virtual void Dispose(bool disposing)
+    private void Dispose(bool disposing)
     {
         if (!disposing)
         {
