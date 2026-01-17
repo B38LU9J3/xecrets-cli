@@ -21,10 +21,16 @@ jobs:
           repository: B38LU9J3/xecrets-net
           path: xecrets-net
 
-      - name: Setup .NET SDK
+      - name: Checkout xecrets-slip39
+        uses: actions/checkout@v4
+        with:
+          repository: B38LU9J3/xecrets-slip39
+          path: xecrets-slip39
+
+      - name: Setup .NET SDK (from global.json)
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: "8.0.x"
+          global-json-file: xecrets-cli/global.json
 
       - name: Restore
         run: dotnet restore xecrets-cli/src/Xecrets.Cli.sln
