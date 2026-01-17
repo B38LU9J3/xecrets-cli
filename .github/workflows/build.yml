@@ -8,6 +8,7 @@ on:
 jobs:
   build:
     runs-on: windows-latest
+
     steps:
       - name: Checkout xecrets-cli
         uses: actions/checkout@v4
@@ -20,15 +21,20 @@ jobs:
           repository: B38LU9J3/xecrets-net
           path: xecrets-net
 
-      - name: Setup .NET
+      - name: Setup .NET SDK
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: "8.0.x"
 
       - name: Restore
-        working-directory: xecrets-cli
-        run: dotnet restore
+        run: dotnet restore xecrets-cli/src/Xecrets.Cli.sln
 
       - name: Build (Release)
-        working-directory: xecrets-cli
-        run: dotnet build -c Release --no-restore
+        run: dotnet build xecrets-cli/src/Xecrets.Cli.sln -c Release --no-restore
+
+      - name: Upload artefacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-output
+          path: |
+            xecrets-cli/**/bin/Release/**
